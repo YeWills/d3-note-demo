@@ -11,7 +11,8 @@
   },
   "watch": [
     "server/",
-    "src/"
+    "src/",
+    "pages/"
   ],
   "ext": "js json html"
 }
