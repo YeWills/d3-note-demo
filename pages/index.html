@@ -3,39 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-
-        .node {
-            cursor: pointer;
-        }
-
-        .node circle {
-            fill: #fff;
-            stroke: steelblue;
-            stroke-width: 1.5px;
-        }
-
-        .node text {
-            font: 10px sans-serif;
-        }
-
-        .link {
-            fill: none;
-            stroke: #ccc;
-            stroke-width: 1.5px;
-        }
-        svg{
-            border: 1px solid #000;
-        }
-        svg .svg-box{
-            border: 1px solid #000;
-            width: 76px;
-            height: 70px;
-            fill: #fff;
-            stroke: #e9e9e9;
-            stroke-width: 1px;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <script src="./d3js.js"></script>
@@ -51,7 +19,9 @@
     var tree = d3.layout.tree()
             .size([height, width]);
 
+    // diagonal 生成对角线
     var diagonal = d3.svg.diagonal()
+    // 转换坐标轴方向
             .projection(function(d) { return [d.y, d.x]; });
 
     var svg = d3.select("body").append("svg")
@@ -88,7 +58,11 @@
                 links = tree.links(nodes);
 
         // Normalize for fixed-depth.
-        nodes.forEach(function(d) { d.y = d.depth * 180; });
+        //当节点的层级变动的时候，依然保证节点的位置美观
+        //depth 层级的意思，有 1 2 3 。。。
+        nodes.forEach(function(d) { 
+          d.y = d.depth * 180; 
+        });
 
         // Update the nodes…
         var node = svg.selectAll("g.node")
@@ -97,8 +71,10 @@
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
                 .attr("class", "node")
-                .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-                .on("click", click);
+                .attr("transform", function(d) {
+                        console.log(source.y0)
+                        return "translate(" + source.y0 + "," + source.x0 + ")"; 
+                        })
         //画边框的元素
         nodeEnter.append('image')
                 .attr("xlink:href","./laptop.png")
@@ -117,6 +93,7 @@
 
 
         // Transition nodes to their new position.
+        // node.transition 更新的时候，用来做动画效果，固定写法
         var nodeUpdate = node.transition()
                 .duration(duration)
                 .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
@@ -173,19 +150,8 @@
         });
     }
 
-    // Toggle children on click.
-    function click(d) {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-        } else {
-            d.children = d._children;
-            d._children = null;
-        }
-        update(d);
-    }
-
-
 </script>
 </body>
 </html>
+
+
