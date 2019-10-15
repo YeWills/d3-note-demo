@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <!-- <link rel="stylesheet" href="./style.css"> -->
-    <link rel="stylesheet" href="./style copy.css">
+    <style>
+    
+    .node circle {
+            fill: #fff;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        .node text {
+            font: 10px sans-serif;
+        }
+
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 1.5px;
+        }
+    </style>
 </head>
 <body>
 <script src="./d3js.js"></script>
@@ -19,7 +35,7 @@
             .attr("width", width + padding.right + padding.left)
             .attr("height", height + padding.top + padding.bottom)
             .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("transform", "translate(" + padding.left + "," + padding.top + ")");
 
 
         var tree = d3.layout.tree()
@@ -48,9 +64,11 @@
 //         }
 
 //         root.children.forEach(collapse);
-        update(root);
+redraw(root);
 
-        function update(source) {
+
+function redraw(source){
+
 
 // Compute the new tree layout.
 var nodes = tree.nodes(root),
@@ -62,6 +80,8 @@ var nodes = tree.nodes(root),
 nodes.forEach(function(d) { 
   d.y = d.depth * 180; 
 });
+
+
 
 // Update the nodes…
 var nodeUpdate = svg.selectAll(".node")
@@ -101,7 +121,7 @@ updateNodes.select("circle")
         updateNodes.select("text")
         .style("fill-opacity", 1);
 // Transition exiting nodes to the parent's new position.
-var exitNodes = nodeExit.exit().transition()
+var exitNodes = nodeExit.transition()
         .duration(500)
         .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
         .remove();
@@ -145,12 +165,16 @@ linkExit.transition()
         })
         .remove();
 
-// Stash the old positions for transition.
+        // Stash the old positions for transition.
 nodes.forEach(function(d) {
     d.x0 = d.x;
     d.y0 = d.y;
 });
+
 }
+
+
+
 
 function toggle(d) {
         if (d.children) {
@@ -160,13 +184,9 @@ function toggle(d) {
             d.children = d._children;
             d._children = null;
         }
-        update(d);
     }
     });
 
-//    d3.select(self.frameElement).style("height", "800px");
-
-   
 
 </script>
 </body>
