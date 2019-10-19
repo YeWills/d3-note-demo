@@ -91,6 +91,7 @@
                                 redraw(d);
                         })
 
+                // .attr('r', 0) 意为 隐藏，会在下面都 updateNodes.select("circle") 更新时，显示出来 .attr("r", 6)
                 enterNodes.append('circle')
                         .attr('r', 0)
                         .style('fill', (d) => d._children ? 'red' : '#fff')
@@ -142,7 +143,8 @@
                 // 连线enter 部分的处理 插入路径 添加类
                 linkEnter.insert("path", ".node")
                         .attr("class", "link")
-                        //开始绘制点
+                        //开始绘制点，亮点成一线，起始点-source 终点-target 二点相连，就是连线
+                        //如果起始点和终点在同一个位置，说明连线就是一个点
                         .attr("d", function (d) {
                                 var o = {
                                         x: source.x0,
@@ -156,6 +158,7 @@
                         .transition()
                         .duration(500)
                         // 使用对角线生成器
+                        //连线没有像上面一样指明起始点和终点，就意味着是一个正常的连线
                         .attr("d", diagonal);
 
                 //连线 update部分处理
@@ -164,6 +167,7 @@
                         .attr('d', diagonal)
 
                 // 连线 exit 部分处理
+                // 连线起始点和终点一样，说明连线消失
                 linkExit.transition()
                         .duration(500)
                         .attr("d", function (d) {

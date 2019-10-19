@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/d3.js"></script>
+
+</head>
+
+<body>
+    <div id="svg"></div>
+    <script>
+        const svg = d3.select("#svg").append("svg").attr("width", "300").attr("height", "300");
+        //线性比例尺
+        const xScale = d3.scaleLinear().domain([0, 1000]).range([0,200]);
+        const axis = d3.axisLeft(xScale);
+        const gAxis = svg.append("g").attr("transform","translate(50,10)");
+        gAxis.call(axis);
+    </script>
+</body>
+
+</html>

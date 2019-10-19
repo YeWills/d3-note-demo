@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>饼图带线Label的去重叠处理示例</title>
+    <script src="./lib/d3.js"></script>
+</head>
+<body>
+<h1>Instances of jokes about my name, 2004-2014</h1>
+
+<svg>
+    <defs>
+        <style type="text/css">
+            .label-text {
+                alignment-baseline: middle;
+                font-size: 12px;
+                font-family: arial,helvetica,"sans-serif";
+                fill: #393939;
+            }
+            .label-line {
+                stroke-width: 1;
+                stroke: #393939;
+            }
+            .label-circle {
+                fill: #393939;
+            }
+        </style>
+    </defs>
+    <g id="canvas">
+        <g id="art" />
+        <g id="labels" />
+    </g>
+</svg>
+<p>It could be worse, I could have been named "Michael Bolton."</p>
+
+<script src="PieWithLabelLine.js"></script>
+</body>
+</html>

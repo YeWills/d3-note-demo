@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/d3.js"></script>
+
+</head>
+
+<body>
+    <div id="svg"></div>
+    <!-- https://www.bilibili.com/video/av13492121/?spm_id_from=333.788.videocard.0 -->
+    <script>
+        const dataset = [50, 43, 120, 87, 99, 167, 142];
+        const padding = { top: 20, right: 20, bottom: 20, left: 30 };
+        const height = 400;
+        const width = 600;
+        const xAxisWidth = width - padding.left - padding.right;
+        const yAxisWidth = height - padding.bottom - padding.top;
+        const svg = d3.select("#svg").append("svg").attr("width", width).attr("height", height);
+        const rectStep = 35;
+        const rectWidth = 30;
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+        const genBar = (obj, scale) => {
+            const { xScale, yScale } = scale;
+            obj.attr("fill", (d, i) => color(i))
+                .attr("x", (d, i) => padding.left + xScale(i))
+                .attr("y", (d, i) => height - padding.bottom)
+                .attr("width", xScale.bandwidth())
+                .attr("height", 0)
+                .transition().duration(1000)  //重新赋值y，height 过渡效果
+                .attr("y", (d, i) => height - padding.bottom - (yScale(0) - yScale(d)))
+                .attr("height", d => yScale(0) - yScale(d));
+        };
+        const genText = (obj, scale) => {
+            const { xScale, yScale } = scale;
+            obj.attr("fill", "#fff")
+                .attr("font-size", "14px").attr("text-anchor", "middle")
+                .attr("x", (d, i) => padding.left + xScale(i))
+                .attr("y", (d, i) => height - padding.bottom - (yScale(0) - yScale(d)))
+                .attr("dx", xScale.bandwidth() / 2)
+                .attr("dy", "1em");
+            setTimeout(() => obj.text(d => d), 1000); //为了适应柱子的1s过渡效果
+        };
+        const draw = dataset => {
+            const updateRect = svg.selectAll("rect").data(dataset);
+            const updateText = svg.selectAll("text").data(dataset);
+
+            //标尺
+            const xScale = d3.scaleBand().domain(dataset.map((o, i) => i))
+                .range([0, xAxisWidth]).padding(0.1);
+            const yScale = d3.scaleLinear().domain([0, d3.max(dataset)]).rangeRound([yAxisWidth, 0]);
+
+            //更新旧数据
+            genBar(updateRect, { xScale, yScale });
+            //进入的新数据
+            genBar(updateRect.enter().append("rect"), { xScale, yScale });
+            //移除无效
+            updateRect.exit().remove();
+
+            genText(updateText, { xScale, yScale });
+            genText(updateText.enter().append("text"), { xScale, yScale });
+            updateText.exit().remove();
+
+            //轴
+            const axisX = d3.axisBottom(xScale);
+            const gAxisX = svg.append("g")
+                .attr('transform', `translate(${padding.left}, ${height - padding.bottom})`);
+            gAxisX.call(axisX);
+            const axisY = d3.axisLeft(yScale);
+            const gAxisY = svg.append("g").attr('transform', `translate(${padding.left}, ${height - yAxisWidth - padding.bottom})`);
+            gAxisY.call(axisY);
+        };
+        draw([50, 43, 120, 87, 99, 167, 142]);
+    </script>
+</body>
+
+</html>

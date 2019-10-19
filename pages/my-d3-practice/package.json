@@ -1,0 +1,11 @@
+{
+  "name": "my-d3-practice",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "@types/d3": "^4.13.2"
+  },
+  "devDependencies": {},
+  "author": "wolfx",
+  "license": "ISC"
+}

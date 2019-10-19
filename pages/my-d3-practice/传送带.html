@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>传送带</title>
+  <script src="lib/d3.js"></script>
+  <script src="lib/utils.js"></script>
+  <style>
+    /*利用CSS控制方向和坐标*/
+    .svg-container {
+      display: inline-block;
+      position: absolute;
+      left: 10px;
+      top: 0;
+    }
+    #svg1 {
+      transform: translate(0, 100px);
+    }
+    #svg2 {
+      transform: rotate(180deg);
+    }
+    #svg3 {
+      transform: translate(0, 100px) rotate(45deg);
+    }
+  </style>
+</head>
+<body>
+  <span class="svg-container" id="svg1"></span>
+  <span class="svg-container" id="svg2"></span>
+  <span class="svg-container" id="svg3"></span>
+  <script>
+    class Line {
+      /**
+       * @param element 元素
+       * @param length 线长度
+       * @param color 颜色，默认黑色
+       */
+      constructor(element, length, color = "#000") {
+        this.width = 50; // 线段宽
+        this.space = 10; // 每个线段的间隔距离
+        const lineWidth = 10; // 传送带宽度
+        this.speed = 1000; // 速度，越低越快
+        this.svg = d3.select(element).append("svg").attr("width", length).attr("height", lineWidth);
+        const dataset = [];
+        let i = - (this.width + this.space);
+        while (i < length) {
+          dataset.push(i);
+          i += this.width + this.space;
+        }
+        const onEnter = this.svg.selectAll("rect").data(dataset).enter();
+        this.line = onEnter.append("rect").attr("width", this.width).attr("height", lineWidth)
+          .attr("x", d => d).attr("y", 0)
+          .attr("fill", color);
+      }
+      setColor(color) {
+        this.line.attr("fill", color);
+      }
+      play() {
+        const animate = () => {
+          this.line.transition().duration(0).attr("transform", `translate(0, 0)`)
+            .transition().duration(this.speed).ease(d3.easeLinear).attr("transform", `translate(${this.width + this.space}, 0)`);
+        };
+        animate();
+        this.timer = setInterval(() => animate(), this.speed);
+        return this;
+      }
+      stop() {
+        clearInterval(this.timer);
+      }
+    }
+    const line1 = new Line("#svg1", 300).play();
+    const line2 = new Line("#svg2", 300, "red").play();
+    const line3 = new Line("#svg3", 300, "blue").play();
+    setInterval(() => {
+      // 定时变色
+      const color = d3.schemeCategory10[Math.floor(Math.random() * 10)];
+      line3.setColor(color);
+    }, 1000);
+    setTimeout(() => {
+      // 5s 后停止定时器
+      line1.stop();
+      line2.stop();
+      line3.stop();
+    }, 5000);
+  </script>
+</body>
+</html>

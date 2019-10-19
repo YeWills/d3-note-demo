@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/d3.js"></script>
+
+</head>
+
+<body>
+    <div id="svg"></div>
+    <div id="data">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <script>
+        const svg = d3.select("#svg").append("svg").attr("width", "100").attr("height", "120");
+        const colors = ["red", "blue", "green", "yellow", "#fff"];
+        colors.forEach((color, index) =>
+            svg.append("circle").attr("cx", "50").attr("cy", "50")
+                .attr("r", 50 - index * 10).attr("fill", color)
+        );
+        svg.append("text").attr("x", "0").attr("dx", "20").attr("y", "100").text("Hello D3")
+            .style("text-align", "center");
+
+        const update = d3.select("#data").selectAll("div").data(["A", "B", "C", "D", "E", "F"]).text(d => d);
+        const enter = update.enter();
+        enter.append("div").text(d => d);
+
+        const matrix = [
+            [1,2,3,4,5],
+            ['A','B','C','D','E']
+        ];
+
+        console.log(d3.zip(matrix[0],matrix[1]));
+
+    </script>
+</body>
+
+</html>

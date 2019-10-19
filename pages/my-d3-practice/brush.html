@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/d3.js"></script>
+</head>
+<body>
+    <svg width="800" height="700"></svg>
+</body>
+<script>
+  let data = [[{x: 0, y: 30}, {x: 1, y: 8}, {x: 2, y: 10}, {x: 3, y: 14}, {x: 4, y: 10}, {x: 5, y: 11}, {
+    x: 6,y: 22}, {x: 7, y: 17}, {x: 12, y: 14}, {x: 14, y: 18}, {x: 20, y: 20}]
+  ]
+  let svg = d3.select("svg"), // 选取 svg 元素
+    margin = {top :20,right:20,bottom:50,left:50}, // 定义边距
+    areaWidth = svg.attr("width") - margin.left-margin.right, // 显示区宽度
+    areaHeight = svg.attr("height") - margin.top - margin.bottom, // 显示区高度
+    g = svg.append("g")
+      .attr("transform",`translate(${margin.left},${margin.top})`) // 偏移距离
+      .attr("width",areaWidth) // 设置宽度
+      .attr("height",areaHeight) // 设置高度
+
+  let xScale =d3.scaleLinear() // x 轴设置为线性缩放
+    .domain([0,22]) // 定义输入域
+    .range([0,areaWidth]); // 定义输出域，即可视宽度
+
+  let yScale = d3.scaleLinear()
+    .domain([40,0])
+    .range([0,areaHeight]);
+
+  let xAxis = d3.axisBottom(xScale); // 设置轴的位置
+  let yAxis = d3.axisLeft(yScale);
+
+  let line = d3.line() // 生成曲线路径
+    .curve(d3.curveStepAfter) // 曲线模式为阶梯模式
+    .x(function(d){
+      return xScale(d.x)
+    })
+    .y(function (d) {
+      return yScale(d.y)
+    });
+
+  let t =d3.transition() // 定义过渡动画
+    .duration(500)
+    .ease(d3.easeLinear)
+  let xGrooup = g.append("g") // x轴元素
+    .attr("transform",`translate(0,${areaHeight})`)
+    .call(xAxis)
+
+  let yGroup =  g.append("g") // y轴元素
+    .attr("transform",`translate(0,0)`)
+    .call(yAxis)
+
+  g.append("clipPath") // 裁剪，否则阶梯图移动时可以看到超出的部分
+    .attr("id", "clip")
+    .append("rect")
+    .attr("width", areaWidth)
+    .attr("height", areaHeight);
+
+  let updateLine = g.append("g")  // 用data更新数据
+    .attr("class","chart")
+    .selectAll("line")
+    .data(data)
+
+  let enterLine = updateLine.enter(); // 数据进入
+  let exitLine = updateLine.exit(); // 数据退出
+
+  let path =  enterLine.append("path")  // 数据进入时将上面定义的line绘制
+    .attr("clip-path", "url(#clip)")
+    .attr("class","line")
+    .attr("d",line)
+    .attr("fill","none")
+    .attr("stroke",0)
+    .transition(t)
+    .attr("stroke-width",2)
+    .attr("stroke","green")
+
+  exitLine.remove(); // 数据退出是移出元素
+
+  let zoom = d3.zoom()
+    .scaleExtent([1, 8]) // 使用 zoom.scaleExtent 显示平移范围
+    .translateExtent([[0,0], [100, 100]]) // 使用 zoom.translateExtent 来显示缩放尺度
+    .on("zoom", zoomed);
+
+
+  let zoomRect = svg.append("rect") // 定义缩放区域
+    .attr("class", "zoomRect")
+    .attr("width", areaWidth)
+    .attr("height", areaHeight)
+    .attr("fill", "none")
+    .attr("pointer-events", "all")
+    .call(zoom);
+
+  let brush = d3.brushX() // 定义 brush 组件
+    .extent([[0, 0], [areaWidth, 20]]) // 定义 brush 的范围
+    .on("brush end", brushed);
+
+  let xBrush = d3.scaleLinear().range([0, areaWidth])
+    .domain(xScale.domain());
+
+  let xTop = d3.axisTop(xBrush); // 定义上方x轴
+
+  let brushBox = svg.append("g") // brush 的容器
+    .attr("transform",`translate(${margin.left},${margin.top})`)
+    .attr("class", "brushBox");
+
+  brushBox.append('g')
+    .call(xTop);
+
+  brushBox.append("g")
+    .attr("class", "brush")
+    .call(brush)
+    .call(brush.move, xScale.range())
+    .selectAll("rect")
+    .attr("width", areaWidth)
+    .attr("height", 20);
+
+
+  function zoomed() {
+    // 每次移动brush触发
+    if (d3.event.sourceEvent.type === "wheel" || d3.event.sourceEvent.type === "mousemove") return; // 禁用滚轮
+    let t = d3.event.transform.rescaleX(xScale)
+    xGrooup.call(xAxis.scale(t)); // 改变x轴坐标
+    g.select("path.line").attr("d", line.x( // 对路径进行缩放
+      function(d) {
+        return t(d.x)
+      })
+    );
+    brushBox.select(".brush").call(brush.move,xScale.range().map(d3.event.transform.invertX, d3.event.transform))
+  }
+
+  function brushed() {
+    // console.log(d3.event.sourceEvent)
+    if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+    let s = d3.event.selection || xScale.range();
+    xScale.domain(s.map(xBrush.invert, xBrush));
+    zoomRect.call(zoom.transform, d3.zoomIdentity.scale(areaWidth / (s[1] - s[0]))
+      .translate(-s[0], 0))
+  }
+</script>
+</html>
