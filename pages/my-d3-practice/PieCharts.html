@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/d3.js"></script>
+
+</head>
+
+<body>
+    <div id="svg"></div>
+     <!-- https://www.bilibili.com/video/av13872208/?spm_id_from=333.788.videocard.0 -->
+   
+    <script>
+        const svg = d3.select("#svg").append("svg").attr("width", "300").attr("height", "300");
+        const pie = d3.pie();
+        const dataset = [30, 10, 43, 55, 13];
+        const piedata = pie(dataset);
+        const outerRadius = 150; //外半径
+        const innerRadius = 0; //内半径，为0则中间没有空白
+        const arc = d3.arc()  //弧生成器
+            .innerRadius(innerRadius)   //设置内半径
+            .outerRadius(outerRadius);  //设置外半径
+        const arcs = svg.selectAll("g") // 存放弧的容器
+            .data(piedata) //绑定pie数据
+            .enter() // 数据进入
+            .append("g") // 生成g
+            .attr("transform", "translate(" + (300 / 2) + "," + (300 / 2) + ")"); // 偏移
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+        arcs.append("path")
+            .attr("fill", (d, i) => color(i)) // 填充颜色
+            .attr("d", d => {
+                console.log(d)
+                return arc(d)
+            }); // 用弧生成器生成弧线数据，赋值给SVG的d属性
+        arcs.append("text")
+            .attr("transform", d => "translate(" + arc.centroid(d) + ")") // 设置文本至扇区中心
+            .attr("text-anchor", "middle") //设置文本锚点
+            .attr("fill", "#fff") //设置文字颜色
+            .text(d => d.data);
+    </script>
+</body>
+
+</html>
