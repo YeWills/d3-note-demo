@@ -33,7 +33,6 @@
         arcs.append("path")
             .attr("fill", (d, i) => color(i)) // 填充颜色
             .attr("d", d => {
-                console.log(d)
                 return arc(d)
             }); // 用弧生成器生成弧线数据，赋值给SVG的d属性
         arcs.append("text")
