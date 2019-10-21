@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+
+<script>
+
+
+
+
+    var scalewidth = d3.scale.linear()
+                        .domain([0,80])
+                        .range([0,500])
+
+    var axis = d3.svg.axis()
+                  .ticks(10)
+                  .scale(scalewidth)
+
+    var canvas = d3.select("body")
+                  .append("svg")
+                  .attr("width",500)
+                  .attr("height",500)
+                  .append("g")
+                  ;
+
+    var color = d3.scale.linear()
+                    .domain([0,140])
+                    .range(["red","blue"])
+
+
+    var bar1= canvas.selectAll("rect")
+                .data([20,40,60,80,])
+                .enter()
+                    .append("rect")
+                    .attr("width",function(d) { return scalewidth(d)})
+                    .attr("height",40)
+                    .attr("fill",function(d) { return color(d)})
+                    .attr("y",function(d) { return d * 3});
+
+
+    canvas.append("g")
+          .attr("transform","translate(0,300)")
+          .call(axis)
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+
+<script>
+    d3.csv("data1.csv",function (data2){
+         var canvas = d3.select("body")
+                  .append("svg")
+                  .attr("width",500)
+                  .attr("height",500);
+
+         canvas.selectAll("rect")
+                .data(data2)
+                .enter()
+                  .append("rect")
+                  .attr("width",function(d){ return d.age *10 ;})
+                  .attr("height",48)
+                  .attr("y",function(d,i) { return i* 50 ;})
+                  .attr("fill","blue");
+
+          canvas.selectAll("text")
+                  .data(data2)
+                  .enter()
+                    .append("text")
+                    .attr("fill","white")
+                    .attr("y", function(d,i) { return i * 50 + 24})
+                    .text(function(d) { return d.name ;})
+
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+
+<script>
+    var width = 900,
+        height = 900,
+        padding = 50
+
+    var canvas = d3.select("body")
+                  .append("svg")
+                  .attr("width",width)
+                  .attr("height",height + padding)
+                  .append("g")
+                    .attr("transform","translate(20,0)");
+
+
+
+    d3.csv("test.csv" ,function(d) {
+          <!--console.log(d);-->
+          var map = d.map(function(d2) { return d2.age})
+          <!--console.log(map)-->
+          var histogram1 = d3.layout.histogram()
+                              .bins(6)
+                              (map)
+          <!--console.log(histogram1)-->
+
+    var y = d3.scale.linear()
+              .domain([0,d3.max(histogram1.map(function(d) { return d.length}))])
+              .range([0,height])
+
+    var x = d3.scale.linear()
+              .domain([0,d3.max(map)])
+              .range([0,width])
+
+    var bars = canvas.selectAll(".bar")
+                 .data(histogram1)
+                 .enter()
+                 .append("g")
+
+    var xAxis = d3.svg.axis()
+                  .scale(x)
+                  .orient("bottom")
+    var group = canvas.append("g")
+                  .attr("transform","translate(0," + height + ")")
+                  .call(xAxis)
+
+    bars.append("rect")
+          .attr("x",function(d) { return x(d.x)})
+          .attr("y",function(d) { return height - y(d.y)})
+          .attr("width",function(d) { return x(d.dx)-20 })
+          .attr("height",function(d) { return  y(d.y)})
+          .attr("fill","steelblue")
+
+    bars.append("text")
+          .attr("x" , function(d) {return x(d.x)})
+          .attr("y" , function(d) {return 500 - y(d.y)})
+          .attr("dy","20px")
+          .attr("dx",function(d) {return x(d.dx)/2})
+          .attr("fill","#fff")
+          .attr("text-anchor","middle")
+          .text(function(d) {return d.y})
+
+    })
+
+
+
+
+</script>
+
+</body>
+</html>
