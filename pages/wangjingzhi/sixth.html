@@ -32,7 +32,7 @@ var piedata = pie(dataset);
 
 var innerRadius = 0;
 var outerRadius = 180;
-var arc = d3.svg.arc()
+var arcFn = d3.svg.arc()
 			.innerRadius(innerRadius)
 			.outerRadius(outerRadius);
 
@@ -50,13 +50,13 @@ arcs.append("path")
 		return color(i);
 	})
 	.attr("d", function(d){
-		return arc(d);
+		return arcFn(d);
 	});
 
 arcs.append("text")
 	.attr("class","MyText")
 	.attr("transform", function(d){
-		var center = arc.centroid(d);
+		var center = arcFn.centroid(d);
 		return "translate(" + 
 			center[0] * 1.4 + "," + 
 			center[1] * 1.4 + ")";
