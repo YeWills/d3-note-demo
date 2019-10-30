@@ -23,13 +23,13 @@
 
 
     d3.csv("test.csv" ,function(d) {
-          console.log(d);
+          <!--console.log(d);-->
           var map = d.map(function(d2) { return d2.age})
-          console.log(map)
+          <!--console.log(map)-->
           var histogram1 = d3.layout.histogram()
                               .bins(6)
                               (map)
-          console.log(histogram1)
+          <!--console.log(histogram1)-->
 
     var y = d3.scale.linear()
               .domain([0,d3.max(histogram1.map(function(d) { return d.length}))])

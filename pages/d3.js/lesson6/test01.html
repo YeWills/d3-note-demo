@@ -15,10 +15,10 @@
 
     var scalewidth = d3.scale.linear()
                         .domain([0,80])
-                        .range([0,400])
+                        .range([0,500])
 
     var axis = d3.svg.axis()
-                  .ticks(8)
+                  .ticks(10)
                   .scale(scalewidth)
 
     var canvas = d3.select("body")
@@ -26,13 +26,7 @@
                   .attr("width",500)
                   .attr("height",500)
                   .append("g")
-                  // 不推荐写法---未将坐标轴分组，不容易设置样式：
-                //   .call(axis)
                   ;
-        // 推荐写法---将坐标轴分组，更容易设置样式：
-            canvas.append("g")
-                    .attr("transform","translate(0,300)")
-                    .call(axis)
 
     var color = d3.scale.linear()
                     .domain([0,140])
@@ -45,13 +39,13 @@
                     .append("rect")
                     .attr("width",function(d) { return scalewidth(d)})
                     .attr("height",40)
-                    .attr("fill",function(d) { return color(d)})
+                    <!--.attr("fill",function(d) { return color(d)})-->
                     .attr("y",function(d) { return d * 3});
 
 
-    // canvas.append("g")
-    //       .attr("transform","translate(0,300)")
-    //       .call(axis)
+    canvas.append("g")
+          .attr("transform","translate(0,300)")
+          .call(axis)
 
 
 
