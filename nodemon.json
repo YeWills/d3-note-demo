@@ -3,7 +3,8 @@
   "ignore": [
     ".git",
     "node_modules/**/node_modules",
-    "README.md"
+    "README.md",
+    "pages/d3-jt-book/file.json"
   ],
   "verbose": true,
   "execMap": {

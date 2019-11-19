@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+  <TITLE> ZTREE DEMO </TITLE>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="../lib/css/zTreeStyle/zTreeStyle.css" type="text/css">
+  <style>
+    body {
+      background-color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    div, p, table, th, td {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      font-size: 12px;
+      font-family: dotum, Verdana, Arial, Helvetica, AppleGothic, sans-serif;
+    }
+
+    #testIframe {
+      margin-left: 10px;
+    }
+  </style>
+  <script type="text/javascript" src="../lib/js/jquery-1.4.4.min.js"></script>
+  <script type="text/javascript" src="../lib/js/jquery.ztree.core.js"></script>
+  <script src="../lib/lodash.js"></script>
+  <SCRIPT type="text/javascript">
+    var zTree;
+    var demoIframe;
+
+    var setting = {
+      data: {
+        simpleData: {
+          enable: true,
+          idKey: "id",
+          pIdKey: "pId",
+          rootPId: ""
+        }
+      },
+            callback: {
+        beforeClick: function (treeId, treeNode) {
+          console.log(treeId)
+          var cc = document.createElement('a');
+          cc.target='_blank';
+          cc.href=treeNode.id;
+          cc.click();
+        }
+      }
+    };
+
+    $(document).ready(function () {
+      $.getJSON("file.json", "", function(data) {　 //each循环 使用$.each方法遍历返回的数据date
+        var zNodes = _.uniqWith(data, _.isEqual);
+        var t = $("#tree");
+        t = $.fn.zTree.init(t, setting, zNodes);
+      console.log(1)
+      });
+
+    });
+
+  </SCRIPT>
+</HEAD>
+
+<BODY>
+<TABLE border=0 height=600px align=left>
+  <TR>
+    <TD width=260px align=left valign=top style="BORDER-RIGHT: #999999 1px dashed">
+      <ul id="tree" class="ztree" style="width:260px; overflow:auto;"></ul>
+    </TD>
+    <TD width=770px align=left valign=top>
+     
+    </TD>
+  </TR>
+</TABLE>
+
+</BODY>
+</HTML>
