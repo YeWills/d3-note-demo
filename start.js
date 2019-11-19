@@ -1,8 +1,12 @@
 
 require('./server/static-best.js') //主域名访问：最佳方式
 
-var readFile = true;
+//如果要生成 某目录下的html地址，设置 readFile 为true；
+// 目录生成需要设置 爬取目录readpath 与 爬取数据存储目录outportJson
+var readFile = false;
 var readpath = '/pages/d3-jt-book'
+var outportJson = 'pages/d3-jt-book/file.json'
+
 if(readFile){
     var fs = require('fs');
 var path = require('path');
@@ -48,10 +52,9 @@ console.log(filesList);
 
  //因为nodejs的写入文件只认识字符串或者二进制数，所以把json对象转换成字符串重新写入json文件中
  var str = JSON.stringify(filesList);
- fs.writeFile(path.resolve(__dirname, "pages/d3-jt-book/file.json"), str, function (err,                     
+ fs.writeFile(path.resolve(__dirname, outportJson), str, function (err,                     
     data) {
    if (err) {
-    //    pages/d3-jt-book/file.json
      console.error(err);
    }
    console.log('----------新增成功-------------');
