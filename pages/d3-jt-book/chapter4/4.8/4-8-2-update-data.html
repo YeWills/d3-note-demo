@@ -12,7 +12,7 @@
 
 var dataset = [50, 43, 120, 87, 99, 167, 142];
 
-var width  = 400;	//SVG绘制区域的宽度
+var width  = 600;	//SVG绘制区域的宽度
 var height = 400;	//SVG绘制区域的高度
 	
 var svg = d3.select("body")			//选择<body>
@@ -27,93 +27,67 @@ var rectStep = 35;
 //矩形所占的宽度（不包括空白），单位为像素
 var rectWidth = 30;
 
+function render(node){
+		node.attr("fill","steelblue")		//设置颜色为steelblue
+			.attr("x", function(d,i){		//设置矩形的x坐标
+				return padding.left + i * rectStep;
+			})
+			.attr("y", function(d){		//设置矩形的y坐标
+				return height- padding.bottom - d;
+			})
+			.attr("width",rectWidth)		//设置矩形的宽度
+			.attr("height",function(d){	//设置矩形的高度
+				return d;
+			});
+	}
+function renderText(node){
+	node.attr("fill","white")
+			.attr("font-size","14px")
+			.attr("text-anchor","middle")
+			.attr("x", function(d,i){
+				return padding.left + i * rectStep;
+			})
+			.attr("y", function(d){
+				return height- padding.bottom - d;
+			})
+			.attr("dx",rectWidth/2)
+			.attr("dy","1em")
+			.text(function(d){
+				return d;
+			});
+}
+
 
 function draw(){
-
 	//获取矩形的update部分
 	var updateRect = svg.selectAll("rect")
 					.data(dataset);
-	
 	//获取矩形的enter部分
 	var enterRect = updateRect.enter();
-	
 	//获取矩形的exit部分
 	var exitRect = updateRect.exit();
 	
+	
 	//1. 矩形的update部分的处理方法
-	updateRect.attr("fill","steelblue")		//设置颜色为steelblue
-			.attr("x", function(d,i){		//设置矩形的x坐标
-				return padding.left + i * rectStep;
-			})
-			.attr("y", function(d){		//设置矩形的y坐标
-				return height- padding.bottom - d;
-			})
-			.attr("width",rectWidth)		//设置矩形的宽度
-			.attr("height",function(d){	//设置矩形的高度
-				return d;
-			});
-	
+	render(updateRect);
 	//2. 矩形的enter部分的处理方法
-	enterRect.append("rect")
-			.attr("fill","steelblue")		//设置颜色为steelblue
-			.attr("x", function(d,i){		//设置矩形的x坐标
-				return padding.left + i * rectStep;
-			})
-			.attr("y", function(d){		//设置矩形的y坐标
-				return height- padding.bottom - d;
-			})
-			.attr("width",rectWidth)		//设置矩形的宽度
-			.attr("height",function(d){	//设置矩形的高度
-				return d;
-			});
-	
+	render(enterRect.append("rect"));
 	//3. 矩形的exit部分的处理方法
 	exitRect.remove();
-			
+	
 	
 	//获取文字的update部分
 	var updateText = svg.selectAll("text")
 					.data(dataset);
-	
 	//获取文字的enter部分
 	var enterText = updateText.enter();
-	
 	//获取文字的exit部分
 	var exitText = updateText.exit();
 	
 	//1. 文字的update部分的处理方法
-	updateText.attr("fill","white")
-				.attr("font-size","14px")
-				.attr("text-anchor","middle")
-				.attr("x", function(d,i){
-					return padding.left + i * rectStep;
-				})
-				.attr("y", function(d){
-					return height- padding.bottom - d;
-				})
-				.attr("dx",rectWidth/2)
-				.attr("dy","1em")
-				.text(function(d){
-					return d;
-				});
-	
+	renderText(updateText)
 	//2. 文字的enter部分的处理方法
-	enterText.append("text")
-				.attr("fill","white")
-				.attr("font-size","14px")
-				.attr("text-anchor","middle")
-				.attr("x", function(d,i){
-					return padding.left + i * rectStep;
-				})
-				.attr("y", function(d){
-					return height- padding.bottom - d;
-				})
-				.attr("dx",rectWidth/2)
-				.attr("dy","1em")
-				.text(function(d){
-					return d;
-				});
-	
+	renderText(enterText.append("text"))
 	//3. 文字的exit部分的处理方法
 	exitText.remove();
 }
