@@ -103,6 +103,10 @@ function myadd(){
 	dataset.push( Math.floor(Math.random() * 100) );
 	draw();
 }
+function Subtract(){
+	dataset.pop();
+	draw();
+}
 	
 </script> 
 
@@ -110,6 +114,7 @@ function myadd(){
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button type="button" onclick="mysort()">   排序  </button>
 <button type="button" onclick="myadd()">   增加数据  </button>
+<button type="button" onclick="Subtract()">   减少数据  </button>
 
 </body>
 
