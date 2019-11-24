@@ -40,6 +40,8 @@ g.transition()
 		console.log("start");
 	})
 	.each("interrupt",function(d,i){
+		//下面的 setTimeout是1秒就执行，而我要duration(2000) 2秒执行完，
+		//所以我会在setTimeout会在动画结束前就执行，就触发动画的被打断事件，此时我被执行。
 		console.log("interrupt");
 	})
 	.each("end",function(d,i){
