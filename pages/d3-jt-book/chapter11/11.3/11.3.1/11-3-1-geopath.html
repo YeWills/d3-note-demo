@@ -72,7 +72,9 @@ d3.json("china.topojson", function(error, toporoot) {
 			.enter()
 			.append("path")
 			.attr("class","province")
-			.attr("d", path )
+			.attr("d", function(...args){
+				return path.apply(this, args);
+			} )
 			.on("click",function(d){
 				
 				//计算面积、中心、边界框

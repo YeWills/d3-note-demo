@@ -49,12 +49,13 @@ var graticule = d3.geo.graticule()
 var grid = graticule();
 console.log(grid);
 
+// 绘制网格
 svg.append("path")
 	.datum(grid)
 	.attr("class","graticule")
 	.attr("d",path);
 
-
+// 绘制地图，但不包含网格
 d3.json("world_605kb.json", function(error, root) {
 	if (error) 
 		return console.error(error);
