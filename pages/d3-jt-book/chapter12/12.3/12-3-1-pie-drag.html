@@ -53,8 +53,9 @@
 					  .enter()
 					  .append("g")
 					  .each(function(d){
-					  	d.dx = width/2;
-					  	d.dy = height/2;
+						  //customDx123 这个属性是自己加和命名的
+					  	d.customDx123 = width/2;
+					  	d.customDy123 = height/2;
 					  })
 					  .attr("transform","translate("+( width/2 )+","+ ( height/2 ) +")");
 		
@@ -67,75 +68,6 @@
 				return arc(d);	//使用弧生成器
 			});
 		
-		
-		//绘制弧内的文字
-		arcs.append("text")
-			.attr("transform",function(d){
-				var x = arc.centroid(d)[0] * 1.4;		//文字的x坐标
-				var y = arc.centroid(d)[1] * 1.4;		//文字的y坐标
-				return "translate(" + x + "," + y + ")";
-			})
-			.attr("text-anchor","middle")
-			.style("font-size",fontsize)
-			.text(function(d){
-				//计算市场份额的百分比
-				var percent = Number(d.value)/d3.sum(dataset,function(d){ return d[1]; }) * 100;
-				
-				//保留1位小数点，末尾加一个百分号返回
-				return percent.toFixed(1) + "%";
-			});
-
-		
-		//绘制连接弧外文字的直线
-		arcs.append("line")
-			.style("stroke","black")
-			.attr("x1",function(d){ return arc.centroid(d)[0] * 2; })
-			.attr("y1",function(d){ return arc.centroid(d)[1] * 2; })
-			.attr("x2",function(d){ return arc.centroid(d)[0] * 2.2; })
-			.attr("y2",function(d){ return arc.centroid(d)[1] * 2.2; });
-			
-		//绘制连接弧外文字的直线
-		arcs.append("line")
-			.style("stroke","black")
-			.each(function(d){
-				d.textLine = {x1:0, y1:0, x2:0, y2:0};
-			})
-			.attr("x1",function(d){ 
-				d.textLine.x1 = arc.centroid(d)[0] * 2.2;
-				return d.textLine.x1; 
-			})
-			.attr("y1",function(d){ 
-				d.textLine.y1 = arc.centroid(d)[1] * 2.2;
-				return d.textLine.y1; 
-			})
-			.attr("x2",function(d){ 
-				var strLen = getPixelLength(d.data[0],fontsize) * 1.5;
-				var bx = arc.centroid(d)[0] * 2.2;
-				d.textLine.x2 =	bx >= 0 ? bx + strLen : bx - strLen;
-				return d.textLine.x2;
-			})
-			.attr("y2",function(d){
-				d.textLine.y2 =	arc.centroid(d)[1] * 2.2;
-				return d.textLine.y2; 
-			});
-			
-		//绘制弧外文字
-		arcs.append("text")
-			.attr("transform",function(d){
-				var x = 0;
-				var y = 0;
-				x = ( d.textLine.x1 + d.textLine.x2 ) / 2;
-				y = d.textLine.y1;
-				y = y > 0 ? y + fontsize * 1.1 : y - fontsize * 0.4;
-				return "translate(" + x + "," + y + ")";
-			})
-			.style("text-anchor","middle")
-			.style("font-size",fontsize)
-			.text(function(d){
-				return d.data[0];
-			});
-			
-		
 		//4. 交互式
 		var drag = d3.behavior.drag()
 			    	.origin(null)
@@ -143,30 +75,16 @@
 
 
 		function dragmove(d) {
-			d.dx += d3.event.dx;
-			d.dy += d3.event.dy;
+			  //customDx123 这个属性是自己加和命名的
+			d.customDx123 += d3.event.dx;
+			d.customDy123 += d3.event.dy;
 			d3.select(this)
-				.attr("transform","translate("+d.dx+","+d.dy+")");
+				.attr("transform","translate("+d.customDx123+","+d.customDy123+")");
 		}
 
 
 		arcs.call(drag);
 
-		
-		function getPixelLength(str,fontsize){
-			var curLen = 0;
-			for(var i=0;i<str.length;i++){
-				var code = str.charCodeAt(i);
-				var pixelLen = code > 255 ? fontsize : fontsize/2;
-				curLen += pixelLen;
-			}
-			return curLen;
-		}
-
-
-
-
-		  
         </script>  
 		
     </body>  
