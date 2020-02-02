@@ -3,7 +3,7 @@ require('./server/static-best.js') //主域名访问：最佳方式
 
 //如果要生成 某目录下的html地址，设置 readFile 为true；
 // 目录生成需要设置 爬取目录readpath 与 爬取数据存储目录outportJson
-var readFile = false;
+var readFile = true;
 var readpath = '/pages/d3-jt-book'
 var outportJson = 'pages/d3-jt-book/file.json'
 
