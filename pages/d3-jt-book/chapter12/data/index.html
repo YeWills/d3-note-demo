@@ -11,6 +11,7 @@
 		import {dataset, padding, width, height, colors} from './static/config.js'; 
 		import {Axis} from './static/axis.js'; 
 		import {renderLine} from './static/line.js'; 
+		import {Tooltip} from './static/tooltip.js'; 
 
 		const svg = d3.select("body")			//选择<body>
 			.append("svg")			//在<body>中添加<svg>
@@ -20,8 +21,12 @@
 		const {xScale,yScale,linePath} = axisHelper.init();
 
 		renderLine({svg, linePath, colors, dataset, padding})
+		const tooltip = new Tooltip({svg, dataset, padding, width, height, xScale, colors})
+		tooltip.init();
+
+		console.log(yScale)
 		axisHelper.renderXaxis({svg, xScale,padding,height});
-		axisHelper.renderYaxis({svg, xScale,padding,height});
+		axisHelper.renderYaxis({svg, yScale,padding,height});
 
 	</script>
 <script>  

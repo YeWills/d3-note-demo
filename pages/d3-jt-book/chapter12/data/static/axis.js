@@ -2,7 +2,7 @@
 class AxisFn{
 	constructor({dataset, padding, width, height}){
 		this.width=width;
-		this.dataset=height;
+		this.height=height;
 		this.dataset=dataset;
 		this.padding=padding;
 	}
@@ -25,9 +25,9 @@ class AxisFn{
 			const currGdp = d3.max( dataset[i].gdp , function(d) { return d[1]; } );
 			if( currGdp > gdpmax ){
 				gdpmax = currGdp;
-				break;
 			}
 		}
+		return gdpmax;
 	}
 	generateLinePath=(xScale, yScale)=>{
 		//创建一个直线生成器

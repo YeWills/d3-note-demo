@@ -238,29 +238,7 @@ function mousemove() {
 		.attr("x2",vlx)
 		.attr("y2",height - padding.bottom);
 }
-
-var markStep = 80;
 	
-var gMark = svg.selectAll(".gMark")
-				.data(dataset)
-				.enter()
-				.append("g")
-				.attr("transform",function(d,i){
-					return "translate(" + (padding.left + i * markStep)  + "," + ( height - padding.bottom + 40)  +")";
-				});
-	
-gMark.append("rect")
-		.attr("x",0)
-		.attr("y",0)
-		.attr("width",10)
-		.attr("height",10)
-		.attr("fill",function(d,i){ return colors[i]; });
-
-gMark.append("text")
-		.attr("dx",15)
-		.attr("dy",".5em")
-		.attr("fill","black")
-		.text(function(d){ return d.country; });		
 
 //x轴
 var xAxis = d3.svg.axis()
