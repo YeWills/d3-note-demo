@@ -20,7 +20,7 @@
 		const axisHelper = new Axis({dataset, padding, width, height});
 		const {xScale,yScale,linePath} = axisHelper.init();
 
-		renderLine({svg, linePath, colors, dataset, padding})
+		renderLine({svg, linePath, colors, dataset, padding,xScale,yScale})
 		const tooltip = new Tooltip({svg, dataset, padding, width, height, xScale, colors})
 		tooltip.init();
 
