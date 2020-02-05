@@ -1,7 +1,7 @@
 const width  = 500;	//SVG绘制区域的宽度
 const height = 500;	//SVG绘制区域的高度
 
-const dataset = [
+let dataset = [
 	{
 		country: "确诊",
 		type:'sure',
@@ -23,10 +23,17 @@ const dataset = [
 	{
 		country: "死亡",
 		type:'over',
-		gdp: [[28,0],[29,0],[30,1],
+		gdp: [[28,0],[29,0],[30,2],
 			[31,0]]
 	}
 ];
+dataset = dataset.map(item=>{
+	item.gdp = item.gdp.map((cell, index)=>{
+		cell.push(index);
+		return cell;
+	})
+	return item;
+})
 
 
 const handleColor=(d, colors)=>{

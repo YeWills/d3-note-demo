@@ -1,13 +1,14 @@
 import { handleColor } from './config.js';
 
 class TooltipFn{
-	constructor({svg, dataset, padding, width, height, xScale, colors}){
+	constructor({svg, dataset, padding, width, height, xScale, yScale, colors}){
 		this.svg=svg;
 		this.dataset=dataset;
 		this.padding=padding;
 		this.width=width;
 		this.height=height;
 		this.xScale=xScale;
+		this.yScale=yScale;
 		this.colors=colors;
 	}
 	createTipHtml=(svg, dataset)=>{
@@ -25,6 +26,14 @@ class TooltipFn{
 		var title = tooltip.append("div")
 			.attr("class","title");
 
+		var tipCircle = svg.selectAll(".tipCircle")
+			.data(dataset)
+			.enter()
+		    .append("circle")
+			.attr("class", "tipCircle")
+			.attr("r", 6)
+			.style("opacity",0.0);
+		
 		var des = tooltip.selectAll(".des")
 			.data(dataset)
 			.enter()
@@ -41,11 +50,12 @@ class TooltipFn{
 				title,
 				desColor,
 				desText,
-				vLine
+				vLine,
+				tipCircle,
 			}
 	}
 	renderTip=({svg, padding, width, height, tooltip, title,
-		desColor, desText, vLine, dataset, xScale, colors})=>{
+		desColor, desText, vLine, dataset, xScale, colors, tipCircle})=>{
 			const _this = this;
 		//添加一个透明的监视鼠标事件用的矩形
 		svg.append("rect")
@@ -63,6 +73,7 @@ class TooltipFn{
 			})
 			.on("mouseout", function() { 
 				tooltip.style("opacity",0.0);
+				tipCircle.style("opacity",0.0);
 				vLine.style("display","none");
 			})
 			.on("mousemove", function(){
@@ -74,13 +85,15 @@ class TooltipFn{
 					desText,
 					tooltip,
 					xScale,
+					yScale:_this.yScale,
 					vLine,
 					colors,
 					height,
+					tipCircle,
 				}])
 			});
 	}
-	mousemove({dataset, padding, title, desColor, desText, tooltip, xScale, vLine, colors, height}) {
+	mousemove({dataset, padding, title, desColor, desText, tooltip, xScale, vLine, colors, height, tipCircle, yScale}) {
 		/* 当鼠标在透明矩形内滑动时调用 */
 		
 		//折线的源数组
@@ -98,20 +111,36 @@ class TooltipFn{
 		x0 = Math.round(x0);
 		
 		//查找在原数组中x0的值，并返回索引号
-		var bisect = d3.bisector( function(d) { return d[0]; }).left;
+		var bisect = d3.bisector( function(d) { return d[2]; }).left;
 		var index = bisect(data, x0) ;
 		
+
+		const isWithinChart = index <= (dataset[0].gdp.length-1)
+
+		if(!isWithinChart) return;
+
+		var startDate = '2020/1/28';
+		const month = moment(startDate, 'YYYY/MM/DD').add(x0, 'day').get('month')+1;
+		const day = moment(startDate, 'YYYY/MM/DD').add(x0, 'day').get('date');
 		//获取年份和gdp数据
-		var year = x0;
+		var year = `${month}月${day}日`;
 		var gdp = [];
 		
 		for(var k=0; k<dataset.length; k++ ){
-			gdp[k] = { country: dataset[k].country, 
-					   value: dataset[k].gdp[index][1]};
-		}
+				gdp[k] = { country: dataset[k].country, 
+					value: dataset[k].gdp[index][1]};
+			}
+
+		tipCircle.attr("transform", function (point, i) {
+			var focusX = xScale(index) + padding.left;
+			var focusY = yScale(gdp[i].value) + padding.top;
+			return "translate(" + focusX + "," + focusY + ")"
+		})
+		.style("opacity",1.0);
+		// .style("opacity",1);
 	
 		//设置提示框的标题文字（年份）
-		title.html("<strong>" + year + "年</strong>");
+		title.html("<strong>" + year + "</strong>");
 		
 		//设置颜色标记的颜色
 		desColor.style("background-color",function(d,i){
@@ -128,7 +157,7 @@ class TooltipFn{
 				.style("top", (d3.event.pageY + 20) + "px");
 	
 		//获取垂直对齐线的x坐标
-		var vlx = xScale(data[index][0]) + padding.left;
+		var vlx = xScale(data[index][2]) + padding.left;
 		
 		//设定垂直对齐线的起点和终点
 		vLine.attr("x1", vlx)
@@ -137,7 +166,7 @@ class TooltipFn{
 			.attr("y2",height - padding.bottom);
 	}
 	init=()=>{
-		const {tooltip, title, desColor, desText, vLine } = this.createTipHtml(this.svg, this.dataset);
+		const {tooltip, title, desColor, desText, vLine, tipCircle } = this.createTipHtml(this.svg, this.dataset);
 		this.renderTip({
 			svg: this.svg,
 			padding: this.padding,
@@ -151,6 +180,7 @@ class TooltipFn{
 			dataset:this.dataset,
 			xScale:this.xScale,
 			colors:this.colors,
+			tipCircle,
 		})
 	}
 	

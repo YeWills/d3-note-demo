@@ -5,10 +5,12 @@ class AxisFn{
 		this.height=height;
 		this.dataset=dataset;
 		this.padding=padding;
+		this.xDomain=dataset.length ? dataset[0].gdp.length : 0;
+		return;
 	}
 	generateXscale=(width, padding)=>{
 		const xScale = d3.scale.linear()
-					.domain([28,31])
+					.domain([0,this.xDomain])
 					.range([ 0 , width - padding.left - padding.right ]);
 		return xScale;
 	}
@@ -32,7 +34,7 @@ class AxisFn{
 	generateLinePath=(xScale, yScale)=>{
 		//创建一个直线生成器
 		var linePath = d3.svg.line()
-		.x(function(d){ return xScale(d[0]); })
+		.x(function(d){ return xScale(d[2]); })
 		.y(function(d){ return yScale(d[1]); })
 		//.interpolate("basis");
 		return linePath;
@@ -57,7 +59,12 @@ class AxisFn{
 		const xAxis = d3.svg.axis()
 			.scale(xScale)
 			.ticks(5)
-			.tickFormat(d3.format("d"))
+			.tickFormat(function(a,b, c){
+				var startDate = '2020/1/28';
+				const month = moment(startDate, 'YYYY/MM/DD').add(a, 'day').get('month')+1;
+				const day = moment(startDate, 'YYYY/MM/DD').add(a, 'day').get('date');
+				return `${month}/${day}`;
+			})
 			.orient("bottom");
 		var update = svg.selectAll("g.xAxis")
 			//data 后面的数组[1]只是任意写的，只要数组的长度为1就行，使用data，以便得到 enter、exit用来重绘。

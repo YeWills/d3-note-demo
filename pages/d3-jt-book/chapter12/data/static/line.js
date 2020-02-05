@@ -21,7 +21,7 @@ const renderPoint = ({
 	console.log(exit)
 
 	update.attr("transform", function (point) {
-		var x1 = point[0];
+		var x1 = point[2];
 		var y1 = point[1];
 		var focusX = xScale(x1) + padding.left;
 		var focusY = yScale(y1) + padding.top;
@@ -32,7 +32,7 @@ const renderPoint = ({
 		.attr("class", "MyCircle")
 		.attr("r", 4.5)
 		.attr("transform", function (point) {
-			var x1 = point[0];
+			var x1 = point[2];
 			var y1 = point[1];
 			var focusX = xScale(x1) + padding.left;
 			var focusY = yScale(y1) + padding.top;

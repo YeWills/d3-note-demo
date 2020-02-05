@@ -13,6 +13,7 @@
 	</div>
 	<div id="chart"></div>
 	<script src="../../d3/3.x/d3.min.js" charset="utf-8"></script>  
+	<script src="./lib/moment.min.js" charset="utf-8"></script>  
 	<script type="module"> 
 		import {dataset, padding, width, height, colors, handleColor} from './static/config.js'; 
 		import {Axis} from './static/axis.js'; 
@@ -57,7 +58,7 @@
 			const {xScale,yScale,linePath} = axisHelper.init();
 
 			renderLine({svg, linePath, colors, dataset:validDataset, padding,xScale,yScale, handleColor})
-			const tooltip = new Tooltip({svg, dataset:validDataset, padding, width, height, xScale, colors})
+			const tooltip = new Tooltip({svg, dataset:validDataset, padding, width, height, xScale, yScale, colors})
 			tooltip.init();
 
 			// console.log(yScale)
