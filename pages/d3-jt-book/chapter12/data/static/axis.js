@@ -5,7 +5,7 @@ class AxisFn{
 		this.height=height;
 		this.dataset=dataset;
 		this.padding=padding;
-		this.xDomain=dataset.length ? dataset[0].gdp.length : 0;
+		this.xDomain=dataset.length ? dataset[0].gdp.length-1 : 0;
 		return;
 	}
 	generateXscale=(width, padding)=>{
