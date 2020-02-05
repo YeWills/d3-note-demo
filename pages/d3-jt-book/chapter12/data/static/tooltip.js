@@ -136,6 +136,9 @@ class TooltipFn{
 			var focusY = yScale(gdp[i].value) + padding.top;
 			return "translate(" + focusX + "," + focusY + ")"
 		})
+		.attr("fill",function(d,i){
+			return handleColor(d, colors);
+		})
 		.style("opacity",1.0);
 		// .style("opacity",1);
 	

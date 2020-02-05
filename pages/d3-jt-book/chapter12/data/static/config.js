@@ -28,7 +28,7 @@ let dataset = [
 ];
 dataset = dataset.map(item=>{
 	item.gdp = item.gdp.map((cell, index)=>{
-		cell.push(index);
+		cell = cell.concat([index, item.type]);
 		return cell;
 	})
 	return item;

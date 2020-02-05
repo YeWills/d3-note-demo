@@ -38,6 +38,9 @@ const renderPoint = ({
 			var focusY = yScale(y1) + padding.top;
 			return "translate(" + focusX + "," + focusY + ")"
 		})
+		.attr("fill",function(d,i){
+			return handleColor({type:d[3]}, colors);
+		})
 	exit.remove();
 }
 
