@@ -1,3 +1,4 @@
+import { handleColor } from './config.js';
 
 class TooltipFn{
 	constructor({svg, dataset, padding, width, height, xScale, colors}){
@@ -114,7 +115,7 @@ class TooltipFn{
 		
 		//设置颜色标记的颜色
 		desColor.style("background-color",function(d,i){
-				return colors[i];
+			return handleColor(d, colors);
 			});
 		
 		//设置描述文字的内容

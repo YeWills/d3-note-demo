@@ -5,33 +5,77 @@
   <link rel="stylesheet" href="./style.css">
   </head> 
 <body>
-
+	<div>
+		<span class="type" id="sure" >确诊</span>
+		<span class="type" id="suspected" >疑似</span>
+		<span class="type" id="cure" >治愈</span>
+		<span class="type" id= "over" >死亡</span>
+	</div>
+	<div id="chart"></div>
 	<script src="../../d3/3.x/d3.min.js" charset="utf-8"></script>  
 	<script type="module"> 
-		import {dataset, padding, width, height, colors} from './static/config.js'; 
+		import {dataset, padding, width, height, colors, handleColor} from './static/config.js'; 
 		import {Axis} from './static/axis.js'; 
 		import {renderLine} from './static/line.js'; 
 		import {Tooltip} from './static/tooltip.js'; 
 
-		const svg = d3.select("body")			//选择<body>
-			.append("svg")			//在<body>中添加<svg>
-			.attr("width", width)	//设定<svg>的宽度属性
-			.attr("height", height);//设定<svg>的高度属性
-		const axisHelper = new Axis({dataset, padding, width, height});
-		const {xScale,yScale,linePath} = axisHelper.init();
+		const svg = d3.select("#chart")			//选择<body>
+				.append("svg")			//在<body>中添加<svg>
+				.attr("width", width)	//设定<svg>的宽度属性
+				.attr("height", height);//设定<svg>的高度属性
 
-		renderLine({svg, linePath, colors, dataset, padding,xScale,yScale})
-		const tooltip = new Tooltip({svg, dataset, padding, width, height, xScale, colors})
-		tooltip.init();
+		const typeStatus = {
+			sure:true,
+			suspected:true,
+			cure:true,
+			over:true,
+		}
+		function handleType(type){
+			if(type === 'all'){
+				return dataset;
+			}
+			typeStatus[type] = !typeStatus[type];
+			const validTypes = Object.entries(typeStatus).reduce((acc, item)=>{
+				if(item[1]) acc.push(item[0]);
+				return acc;
+			}, []);
+			const validData = dataset.filter(item=>validTypes.includes(item.type));
+			return validData;
+		}
 
-		console.log(yScale)
-		axisHelper.renderXaxis({svg, xScale,padding,height});
-		axisHelper.renderYaxis({svg, yScale,padding,height});
+		function render(type='all'){
+			// const wrap = document.getElementById('chart');
+			// if(wrap.firstChild){
+			// 	wrap.removeChild(wrap.firstChild);
+			// 	return;
+			// };
+			
+			const validDataset = handleType(type);
+			// console.log(validDataset)
+		
+			const axisHelper = new Axis({dataset:validDataset, padding, width, height});
+			const {xScale,yScale,linePath} = axisHelper.init();
+
+			renderLine({svg, linePath, colors, dataset:validDataset, padding,xScale,yScale, handleColor})
+			const tooltip = new Tooltip({svg, dataset:validDataset, padding, width, height, xScale, colors})
+			tooltip.init();
+
+			// console.log(yScale)
+			axisHelper.renderXaxis({svg, xScale,padding,height});
+			axisHelper.renderYaxis({svg, yScale,padding,height});
+		}
+
+		render('all');
+
+		document.querySelectorAll('.type').forEach(span=>{
+			span.addEventListener('click', function(){
+				// console.log(span.attributes.id.value)
+				render(span.attributes.id.value);
+			})
+		})
 
 	</script>
-<script>  
 
-</script> 
 
 </body>
 </html>
