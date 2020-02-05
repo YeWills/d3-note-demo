@@ -26,13 +26,22 @@ class TooltipFn{
 		var title = tooltip.append("div")
 			.attr("class","title");
 
-		var tipCircle = svg.selectAll(".tipCircle")
-			.data(dataset)
-			.enter()
+		var circleUpdate = svg.selectAll(".tipCircle")
+		   .data(dataset)
+
+		circleUpdate
+			.attr("r", 6)
+			.style("opacity",0.0);
+
+		var circleEnter = circleUpdate.enter();
+		var circleExit = circleUpdate.exit();
+		circleEnter
 		    .append("circle")
 			.attr("class", "tipCircle")
 			.attr("r", 6)
 			.style("opacity",0.0);
+		
+		circleExit.remove();
 		
 		var des = tooltip.selectAll(".des")
 			.data(dataset)
@@ -51,7 +60,7 @@ class TooltipFn{
 				desColor,
 				desText,
 				vLine,
-				tipCircle,
+				tipCircle:circleUpdate,
 			}
 	}
 	renderTip=({svg, padding, width, height, tooltip, title,

@@ -5,11 +5,16 @@
   <link rel="stylesheet" href="./style.css">
   </head> 
 <body>
-	<div>
-		<span class="type" id="sure" >确诊</span>
-		<span class="type" id="suspected" >疑似</span>
-		<span class="type" id="cure" >治愈</span>
-		<span class="type" id= "over" >死亡</span>
+	<div class="content-title">黄石疫情趋势图</div>
+	<div class="top-title">
+		<div class="title-cell unit">单位(例)</div>
+		<div class="title-cell data-type">
+			<span class="type" id="sure" >确诊</span>
+			<span class="type" id="suspected" >疑似</span>
+			<span class="type" id="cure" >治愈</span>
+			<span class="type" id= "over" >死亡</span>
+		</div>
+		
 	</div>
 	<div id="chart"></div>
 	<script src="../../d3/3.x/d3.min.js" charset="utf-8"></script>  
@@ -35,6 +40,9 @@
 			if(type === 'all'){
 				return dataset;
 			}
+			
+
+
 			typeStatus[type] = !typeStatus[type];
 			const validTypes = Object.entries(typeStatus).reduce((acc, item)=>{
 				if(item[1]) acc.push(item[0]);
@@ -44,34 +52,34 @@
 			return validData;
 		}
 
-		function render(type='all'){
-			// const wrap = document.getElementById('chart');
-			// if(wrap.firstChild){
-			// 	wrap.removeChild(wrap.firstChild);
-			// 	return;
-			// };
-			
-			const validDataset = handleType(type);
-			// console.log(validDataset)
-		
+		function render(validDataset){
 			const axisHelper = new Axis({dataset:validDataset, padding, width, height});
 			const {xScale,yScale,linePath} = axisHelper.init();
-
 			renderLine({svg, linePath, colors, dataset:validDataset, padding,xScale,yScale, handleColor})
 			const tooltip = new Tooltip({svg, dataset:validDataset, padding, width, height, xScale, yScale, colors})
 			tooltip.init();
 
-			// console.log(yScale)
 			axisHelper.renderXaxis({svg, xScale,padding,height});
 			axisHelper.renderYaxis({svg, yScale,padding,height});
 		}
 
-		render('all');
+		render(dataset);
 
 		document.querySelectorAll('.type').forEach(span=>{
 			span.addEventListener('click', function(){
-				// console.log(span.attributes.id.value)
-				render(span.attributes.id.value);
+				const type = span.attributes.id.value;
+				if(Object.entries(typeStatus).filter(t=>t[1]).length<=1 && typeStatus[type]) return;
+				const validDataset = handleType(type);
+				render(validDataset);
+
+				const validTypes = validDataset.map(t=>t.type);
+				document.querySelectorAll('.data-type .type').forEach(dom=>{
+					if(validTypes.includes(dom.attributes.id.value)){
+						dom.classList.remove('type-disabled');
+					}else{
+						dom.classList.add('type-disabled');
+					}
+				})
 			})
 		})
 

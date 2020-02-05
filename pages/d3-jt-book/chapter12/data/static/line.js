@@ -18,7 +18,6 @@ const renderPoint = ({
 	var enter = update.enter();
 
 	var exit = update.exit();
-	console.log(exit)
 
 	update.attr("transform", function (point) {
 		var x1 = point[2];
@@ -26,6 +25,9 @@ const renderPoint = ({
 		var focusX = xScale(x1) + padding.left;
 		var focusY = yScale(y1) + padding.top;
 		return "translate(" + focusX + "," + focusY + ")"
+	})
+	.attr("fill",function(d,i){
+		return handleColor({type:d[3]}, colors);
 	})
 
 	enter.append("circle")

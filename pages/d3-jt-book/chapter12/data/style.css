@@ -1,3 +1,52 @@
+.content-title{
+    margin: 10px 0 0 15px;
+}
+
+.top-title{
+    max-width: 500px;
+    position: relative;
+    font-size: 12px;
+    transform: translateY(13px);
+}
+
+.unit{
+    position: absolute;
+    left: 18px;
+}
+.data-type{
+    position: absolute;
+    right: 15px;
+}
+.data-type .type{
+    position: relative;
+    cursor: pointer;
+}
+.type-disabled{
+    opacity: 0.3;
+}
+.data-type .type::before{
+    content: '';
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 3px;
+   
+}
+#sure::before{
+    background-color: rgb(232, 49, 50);
+}
+#suspected::before{
+    background-color: rgb(236, 146, 23);
+}
+#cure::before{
+    background-color: rgb(16, 174, 181);
+}
+#over::before{
+    background-color: rgb(77, 80, 84);
+}
+
 .axis path,
 .axis line{
     fill: none;
@@ -16,7 +65,7 @@
 }
 
 .tooltip{
-    width: 150px;
+    width: 120px;
     height: auto;
     position: absolute;
     font-family: simsun;
