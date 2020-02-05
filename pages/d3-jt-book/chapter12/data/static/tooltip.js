@@ -128,7 +128,7 @@ class TooltipFn{
 
 		if(!isWithinChart) return;
 
-		var startDate = '2020/1/28';
+		var startDate = '2020/1/24';
 		const month = moment(startDate, 'YYYY/MM/DD').add(x0, 'day').get('month')+1;
 		const day = moment(startDate, 'YYYY/MM/DD').add(x0, 'day').get('date');
 		//获取年份和gdp数据

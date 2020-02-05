@@ -60,7 +60,7 @@ class AxisFn{
 			.scale(xScale)
 			// .ticks(5)
 			.tickFormat(function(a,b, c){
-				var startDate = '2020/1/28';
+				var startDate = '2020/1/24';
 				const month = moment(startDate, 'YYYY/MM/DD').add(a, 'day').get('month')+1;
 				const day = moment(startDate, 'YYYY/MM/DD').add(a, 'day').get('date');
 				return `${month}/${day}`;
