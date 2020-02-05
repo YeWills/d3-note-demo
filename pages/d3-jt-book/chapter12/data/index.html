@@ -40,9 +40,6 @@
 			if(type === 'all'){
 				return dataset;
 			}
-			
-
-
 			typeStatus[type] = !typeStatus[type];
 			const validTypes = Object.entries(typeStatus).reduce((acc, item)=>{
 				if(item[1]) acc.push(item[0]);
