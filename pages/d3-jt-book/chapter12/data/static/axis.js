@@ -47,29 +47,51 @@ class AxisFn{
 			linePath,
 		}
 	}
-	renderXaxis=({svg, xScale,padding,height})=>{
+	renderXaxis = ({
+		svg,
+		xScale,
+		padding,
+		height
+	}) => {
 		//x轴
-	const xAxis = d3.svg.axis()
-		.scale(xScale)
-		.ticks(5)
-		.tickFormat(d3.format("d"))
-		.orient("bottom");
-	svg.append("g")
-			.attr("class","axis")
-			.attr("transform","translate(" + padding.left + "," + (height - padding.bottom) +  ")")
+		const xAxis = d3.svg.axis()
+			.scale(xScale)
+			.ticks(5)
+			.tickFormat(d3.format("d"))
+			.orient("bottom");
+		var update = svg.selectAll("g.xAxis")
+			//data 后面的数组[1]只是任意写的，只要数组的长度为1就行，使用data，以便得到 enter、exit用来重绘。
+			.data([1]);
+		var enter = update.enter();
+		var exit = update.exit();
+		update.call(xAxis);
+		enter.append("g")
+			.attr("class", "xAxis axis")
+			.attr("transform", "translate(" + padding.left + "," + (height - padding.bottom) + ")")
 			.call(xAxis);
+		exit.remove();
 
 	}
-	renderYaxis=({svg, yScale,padding})=>{
-	//y轴
-	const yAxis = d3.svg.axis()
-		.scale(yScale)
-		.orient("left");
-	svg.append("g")
-		.attr("class","axis")
-		.attr("transform","translate(" + padding.left + "," + padding.top +  ")")
-		.call(yAxis); 
+	renderYaxis = ({
+		svg,
+		yScale,
+		padding
+	}) => {
+		//y轴
+		const yAxis = d3.svg.axis()
+			.scale(yScale)
+			.orient("left");
+		var update = svg.selectAll("g.yAxis")
+			.data([1]);
+		var enter = update.enter();
+		var exit = update.exit();
+		update.call(yAxis);
+		enter.append("g")
+			.attr("class", "yAxis axis")
+			.attr("transform", "translate(" + padding.left + "," + padding.top + ")")
+			.call(yAxis);
+		exit.remove();
 	}
-}
+	}
 
 export const Axis = AxisFn
