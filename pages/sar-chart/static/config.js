@@ -84,7 +84,7 @@ const handleColor=(d, colors)=>{
 
 //定义两个颜色				
 // var colors = [ d3.rgb(0,0,255) , d3.rgb(0,255,0), d3.rgb(0,255,255), d3.rgb(255,255,0) ];
-var colors = [ 'rgb(232, 49, 50)' , 'rgb(236, 146, 23)', 'rgb(16, 174, 181)', 'rgb(77, 80, 84)', 'rgba(10, 45, 237, 0.88)', '#9c27b0' ];
+var colors = [ 'rgb(232, 49, 50)' , 'rgb(236, 146, 23)', 'rgb(16, 174, 181)', 'rgb(77, 80, 84)', 'rgba(10, 45, 237, 0.88)', '#9C27B0' ];
 //外边框
 var padding = { top: 50 , right: 50, bottom: 50, left: 50 };
 export {
