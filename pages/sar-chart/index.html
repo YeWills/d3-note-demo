@@ -14,6 +14,8 @@
 			<span class="type" id="suspected" >疑似</span>
 			<span class="type" id="cure" >治愈</span>
 			<span class="type" id= "over" >死亡</span>
+			<span class="type type-disabled" id= "new" >新增</span>
+			<span class="type type-disabled" id= "newsp" >新增疑似</span>
 		</div>
 		
 	</div>
@@ -36,12 +38,13 @@
 			suspected:true,
 			cure:true,
 			over:true,
+			new:false,
+			newsp:false,
 		}
 		function handleType(type){
-			if(type === 'all'){
-				return dataset;
+			if(type !== 'init'){
+				typeStatus[type] = !typeStatus[type];
 			}
-			typeStatus[type] = !typeStatus[type];
 			const validTypes = Object.entries(typeStatus).reduce((acc, item)=>{
 				if(item[1]) acc.push(item[0]);
 				return acc;
@@ -60,8 +63,8 @@
 			axisHelper.renderXaxis({svg, xScale,padding,height});
 			axisHelper.renderYaxis({svg, yScale,padding,height});
 		}
-
-		render(dataset);
+		const initDataset = handleType('init');
+		render(initDataset);
 
 		document.querySelectorAll('.type').forEach(span=>{
 			span.addEventListener('click', function(){
