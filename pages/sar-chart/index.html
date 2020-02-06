@@ -1,0 +1,88 @@
+<html>  
+  <head>  
+		<meta charset="utf-8">  
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>12.2.2 折线图的提示框</title>  
+  <link rel="stylesheet" href="./style.css">
+  </head> 
+<body>
+	<div class="content-title">黄石疫情趋势图</div>
+	<div class="top-title">
+		<div class="title-cell unit">单位(例)</div>
+		<div class="title-cell data-type">
+			<span class="type" id="sure" >确诊</span>
+			<span class="type" id="suspected" >疑似</span>
+			<span class="type" id="cure" >治愈</span>
+			<span class="type" id= "over" >死亡</span>
+		</div>
+		
+	</div>
+	<div id="chart"></div>
+	<script src="./lib/d3.min.js" charset="utf-8"></script>  
+	<script src="./lib/moment.min.js" charset="utf-8"></script>  
+	<script type="module"> 
+		import {dataset, padding, width, height, colors, handleColor} from './static/config.js'; 
+		import {Axis} from './static/axis.js'; 
+		import {renderLine} from './static/line.js'; 
+		import {Tooltip} from './static/tooltip.js'; 
+
+		const svg = d3.select("#chart")			//选择<body>
+				.append("svg")			//在<body>中添加<svg>
+				.attr("width", width)	//设定<svg>的宽度属性
+				.attr("height", height);//设定<svg>的高度属性
+
+		const typeStatus = {
+			sure:true,
+			suspected:true,
+			cure:true,
+			over:true,
+		}
+		function handleType(type){
+			if(type === 'all'){
+				return dataset;
+			}
+			typeStatus[type] = !typeStatus[type];
+			const validTypes = Object.entries(typeStatus).reduce((acc, item)=>{
+				if(item[1]) acc.push(item[0]);
+				return acc;
+			}, []);
+			const validData = dataset.filter(item=>validTypes.includes(item.type));
+			return validData;
+		}
+
+		function render(validDataset){
+			const axisHelper = new Axis({dataset:validDataset, padding, width, height});
+			const {xScale,yScale,linePath} = axisHelper.init();
+			renderLine({svg, linePath, colors, dataset:validDataset, padding,xScale,yScale, handleColor})
+			const tooltip = new Tooltip({svg, dataset:validDataset, padding, width, height, xScale, yScale, colors})
+			tooltip.init();
+
+			axisHelper.renderXaxis({svg, xScale,padding,height});
+			axisHelper.renderYaxis({svg, yScale,padding,height});
+		}
+
+		render(dataset);
+
+		document.querySelectorAll('.type').forEach(span=>{
+			span.addEventListener('click', function(){
+				const type = span.attributes.id.value;
+				if(Object.entries(typeStatus).filter(t=>t[1]).length<=1 && typeStatus[type]) return;
+				const validDataset = handleType(type);
+				render(validDataset);
+
+				const validTypes = validDataset.map(t=>t.type);
+				document.querySelectorAll('.data-type .type').forEach(dom=>{
+					if(validTypes.includes(dom.attributes.id.value)){
+						dom.classList.remove('type-disabled');
+					}else{
+						dom.classList.add('type-disabled');
+					}
+				})
+			})
+		})
+
+	</script>
+
+
+</body>
+</html>
