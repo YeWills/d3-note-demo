@@ -1,0 +1,106 @@
+.content-title{
+    margin: 10px 0 0 15px;
+}
+
+.top-title{
+    max-width: 800px;
+    position: relative;
+    font-size: 12px;
+    transform: translateY(13px);
+}
+
+.unit{
+    position: absolute;
+    left: 18px;
+}
+.data-type{
+    position: absolute;
+    right: 15px;
+}
+.data-type .type{
+    position: relative;
+    cursor: pointer;
+}
+.type-disabled{
+    opacity: 0.3;
+}
+.data-type .type::before{
+    content: '';
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 3px;
+   
+}
+#sure::before{
+    background-color: rgb(232, 49, 50);
+}
+#suspected::before{
+    background-color: rgb(236, 146, 23);
+}
+#cure::before{
+    background-color: rgb(16, 174, 181);
+}
+#over::before{
+    background-color: rgb(77, 80, 84);
+}
+#new::before{
+    background-color: rgba(10, 45, 237, 0.88);
+}
+#newsp::before{
+    background-color: #9C27B0;
+}
+
+.axis path,
+.axis line{
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
+ 
+.axis text {
+    font-family: sans-serif;
+    font-size: 11px;
+}
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.tooltip{
+    width: 120px;
+    height: auto;
+    position: absolute;
+    font-family: simsun;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: left;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.tooltip .title{
+    border-bottom: 1px solid #000;
+    text-align: center;
+}
+
+.tooltip .desColor{
+    width: 10px;
+    height: 10px;
+    float: left;
+    margin: 9px 8px 1px 8px;
+}
+
+.tooltip .desText{
+    display: inline;
+}
+
+.focusLine {
+    stroke: black;
+    stroke-width: 1px;
+    stroke-dasharray: 5,5;
+}
