@@ -54,14 +54,14 @@
 		}
 
 		function render(validDataset){
-			const axisHelper = new Axis({dataset:validDataset, padding, width, height});
+			const axisHelper = new Axis({dataset:validDataset});
 			const {xScale,yScale,linePath} = axisHelper.init();
-			renderLine({svg, linePath, colors, dataset:validDataset, padding,xScale,yScale, handleColor})
-			const tooltip = new Tooltip({svg, dataset:validDataset, padding, width, height, xScale, yScale, colors})
+			renderLine({svg, linePath, dataset:validDataset,xScale,yScale})
+			const tooltip = new Tooltip({svg, dataset:validDataset,xScale, yScale})
 			tooltip.init();
 
-			axisHelper.renderXaxis({svg, xScale,padding,height});
-			axisHelper.renderYaxis({svg, yScale,padding,height});
+			axisHelper.renderXaxis({svg, xScale});
+			axisHelper.renderYaxis({svg, yScale});
 		}
 		const initDataset = handleType('init');
 		render(initDataset);

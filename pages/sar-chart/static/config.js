@@ -51,40 +51,46 @@ dataset = dataset.map(item=>{
 	return item;
 })
 
-
-const handleColor=(d, colors)=>{
-	switch(d.type){
-		case 'sure':{
-			return colors[0];
-			break;
-		}
-		case 'suspected':{
-			return colors[1];
-			break;
-		}
-		case 'cure':{
-			return colors[2];
-			break;
-		}
-		case 'over':{
-			return colors[3];
-			break;
-		}
-		case 'new':{
-			return colors[4];
-			break;
-		}
-		case 'newsp':{
-			return colors[5];
-			break;
-		}
-		default:{}
-	}
-}
-
 //定义两个颜色				
 // var colors = [ d3.rgb(0,0,255) , d3.rgb(0,255,0), d3.rgb(0,255,255), d3.rgb(255,255,0) ];
 var colors = [ 'rgb(232, 49, 50)' , 'rgb(236, 146, 23)', 'rgb(16, 174, 181)', 'rgb(77, 80, 84)', 'rgba(10, 45, 237, 0.88)', '#9C27B0' ];
+
+
+const handleColorBuild=(colors)=>{
+	return (d)=>{
+		switch(d.type){
+			case 'sure':{
+				return colors[0];
+				break;
+			}
+			case 'suspected':{
+				return colors[1];
+				break;
+			}
+			case 'cure':{
+				return colors[2];
+				break;
+			}
+			case 'over':{
+				return colors[3];
+				break;
+			}
+			case 'new':{
+				return colors[4];
+				break;
+			}
+			case 'newsp':{
+				return colors[5];
+				break;
+			}
+			default:{}
+		}
+	}
+}
+
+const handleColor = handleColorBuild(colors);
+
+
 //外边框
 var padding = { top: 50 , right: 50, bottom: 50, left: 50 };
 export {

@@ -1,15 +1,11 @@
-import { handleColor } from './config.js';
+import {padding, width, height, handleColor} from './config.js'; 
 
 class TooltipFn{
-	constructor({svg, dataset, padding, width, height, xScale, yScale, colors}){
+	constructor({svg, dataset, xScale, yScale}){
 		this.svg=svg;
 		this.dataset=dataset;
-		this.padding=padding;
-		this.width=width;
-		this.height=height;
 		this.xScale=xScale;
 		this.yScale=yScale;
-		this.colors=colors;
 	}
 	createTipHtml=(svg, dataset)=>{
 		//添加垂直于x轴的对齐线
@@ -63,8 +59,8 @@ class TooltipFn{
 				tipCircle:circleUpdate,
 			}
 	}
-	renderTip=({svg, padding, width, height, tooltip, title,
-		desColor, desText, vLine, dataset, xScale, colors, tipCircle})=>{
+	renderTip=({svg, tooltip, title,
+		desColor, desText, vLine, dataset, xScale, tipCircle})=>{
 			const _this = this;
 		//添加一个透明的监视鼠标事件用的矩形
 		svg.append("rect")
@@ -88,7 +84,6 @@ class TooltipFn{
 			.on("mousemove", function(){
 				_this.mousemove.apply(this, [{
 					dataset,
-					padding,
 					title,
 					desColor,
 					desText,
@@ -96,13 +91,11 @@ class TooltipFn{
 					xScale,
 					yScale:_this.yScale,
 					vLine,
-					colors,
-					height,
 					tipCircle,
 				}])
 			});
 	}
-	mousemove({dataset, padding, title, desColor, desText, tooltip, xScale, vLine, colors, height, tipCircle, yScale}) {
+	mousemove({dataset, title, desColor, desText, tooltip, xScale, vLine, tipCircle, yScale}) {
 		/* 当鼠标在透明矩形内滑动时调用 */
 		
 		//折线的源数组
@@ -146,7 +139,7 @@ class TooltipFn{
 			return "translate(" + focusX + "," + focusY + ")"
 		})
 		.attr("fill",function(d,i){
-			return handleColor(d, colors);
+			return handleColor(d);
 		})
 		.style("opacity",1.0);
 		// .style("opacity",1);
@@ -156,7 +149,7 @@ class TooltipFn{
 		
 		//设置颜色标记的颜色
 		desColor.style("background-color",function(d,i){
-			return handleColor(d, colors);
+			return handleColor(d);
 			});
 		
 		//设置描述文字的内容
@@ -181,9 +174,6 @@ class TooltipFn{
 		const {tooltip, title, desColor, desText, vLine, tipCircle } = this.createTipHtml(this.svg, this.dataset);
 		this.renderTip({
 			svg: this.svg,
-			padding: this.padding,
-			width: this.width,
-			height: this.height,
 			tooltip,
 			title,
 			desColor,
@@ -191,7 +181,6 @@ class TooltipFn{
 			vLine,
 			dataset:this.dataset,
 			xScale:this.xScale,
-			colors:this.colors,
 			tipCircle,
 		})
 	}

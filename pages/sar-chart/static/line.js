@@ -1,10 +1,8 @@
-import { handleColor } from './config.js';
+import {padding, handleColor} from './config.js'; 
 
 const renderPoint = ({
 	svg,
-	colors,
 	dataset,
-	padding,
 	xScale,
 	yScale
 }) => {
@@ -27,7 +25,7 @@ const renderPoint = ({
 		return "translate(" + focusX + "," + focusY + ")"
 	})
 	.attr("fill",function(d,i){
-		return handleColor({type:d[3]}, colors);
+		return handleColor({type:d[3]});
 	})
 
 	enter.append("circle")
@@ -41,12 +39,12 @@ const renderPoint = ({
 			return "translate(" + focusX + "," + focusY + ")"
 		})
 		.attr("fill",function(d,i){
-			return handleColor({type:d[3]}, colors);
+			return handleColor({type:d[3]});
 		})
 	exit.remove();
 }
 
-const handleLineRender = ({svg, linePath, colors, dataset, padding})=>{
+const handleLineRender = ({svg, linePath, dataset})=>{
 	//添加路径
 	const updateNode = svg.selectAll("path.line")
 		.data(dataset);		//绑定数据
@@ -57,7 +55,7 @@ const handleLineRender = ({svg, linePath, colors, dataset, padding})=>{
 		return linePath(d.gdp);		//返回直线生成器得到的路径
 	})	
 	.attr("stroke",function(d,i){
-		return handleColor(d, colors);
+		return handleColor(d);
 	})
 
 	enterNode.append("path")		//添加足够数量的<path>元素
@@ -69,13 +67,13 @@ const handleLineRender = ({svg, linePath, colors, dataset, padding})=>{
 	.attr("fill","none")
 	.attr("stroke-width",3)
     .attr("stroke",function(d,i){
-    	return handleColor(d, colors);
+    	return handleColor(d);
     })
 
 	exitNode.remove();
 }
 
-export const renderLine =({svg, linePath, colors, dataset, padding,xScale,yScale})=>{
-	handleLineRender({svg, linePath, colors, dataset, padding});
-	renderPoint({svg, colors, dataset, padding,xScale,yScale})
+export const renderLine =({svg, linePath, dataset,xScale,yScale})=>{
+	handleLineRender({svg, linePath, dataset});
+	renderPoint({svg, dataset,xScale,yScale})
 }

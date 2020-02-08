@@ -112,6 +112,14 @@ export const chartDatas = {
         "new": 69,
 		"newsp": 34,
 	},
+	"2/7": {
+		"sure": 703,
+		"suspected": 157,
+		"cure": 43,
+		"over": 2,
+        "new": 68,
+		"newsp": 0,
+	},
 }
 
 

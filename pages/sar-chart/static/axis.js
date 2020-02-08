@@ -1,20 +1,18 @@
+import {padding, width, height} from './config.js'; 
 
 class AxisFn{
-	constructor({dataset, padding, width, height}){
-		this.width=width;
-		this.height=height;
+	constructor({dataset}){
 		this.dataset=dataset;
-		this.padding=padding;
 		this.xDomain=dataset.length ? dataset[0].gdp.length-1 : 0;
 		return;
 	}
-	generateXscale=(width, padding)=>{
+	generateXscale=()=>{
 		const xScale = d3.scale.linear()
 					.domain([0,this.xDomain])
 					.range([ 0 , width - padding.left - padding.right ]);
 		return xScale;
 	}
-	generateYscale=(height,padding,dataset)=>{
+	generateYscale=(dataset)=>{
 		const gdpmax = this.getYmax(dataset);
 		const yScale = d3.scale.linear()
 					.domain([0,gdpmax * 1.1])
@@ -40,8 +38,8 @@ class AxisFn{
 		return linePath;
 	}
 	init=()=>{
-		const xScale = this.generateXscale(this.width, this.padding);
-		const yScale = this.generateYscale(this.height, this.padding, this.dataset);
+		const xScale = this.generateXscale();
+		const yScale = this.generateYscale(this.dataset);
 		const linePath = this.generateLinePath(xScale, yScale);
 		return {
 			xScale,
@@ -52,14 +50,12 @@ class AxisFn{
 	renderXaxis = ({
 		svg,
 		xScale,
-		padding,
-		height
 	}) => {
 		//x轴
 		const xAxis = d3.svg.axis()
 			.scale(xScale)
-			// .ticks(5)
-			.tickFormat(function(a,b, c){
+			.ticks(14)
+			.tickFormat(function(a){
 				var startDate = '2020/1/24';
 				const month = moment(startDate, 'YYYY/MM/DD').add(a, 'day').get('month')+1;
 				const day = moment(startDate, 'YYYY/MM/DD').add(a, 'day').get('date');
@@ -81,8 +77,7 @@ class AxisFn{
 	}
 	renderYaxis = ({
 		svg,
-		yScale,
-		padding
+		yScale
 	}) => {
 		//y轴
 		const yAxis = d3.svg.axis()
