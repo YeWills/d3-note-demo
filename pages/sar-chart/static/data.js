@@ -144,6 +144,14 @@ export const chartDatas = {
         "new": 30,
 		"newsp": 20,
 	},
+	"2/11": {
+		"sure": 874,
+		"suspected": 179,
+		"cure": 96,
+		"over": 6,
+        "new": 39,
+		"newsp": 20,
+	},
 }
 
 // export {}
