@@ -146,11 +146,19 @@ export const chartDatas = {
 	},
 	"2/11": {
 		"sure": 874,
-		"suspected": 179,
+		"suspected": 174,
 		"cure": 96,
 		"over": 6,
         "new": 39,
-		"newsp": 20,
+		"newsp": 15,
+	},
+	"2/12": {
+		"sure": 911,
+		"suspected": 160,
+		"cure": 113,
+		"over": 9,
+        "new": 37,
+		"newsp": 15,
 	},
 }
 
