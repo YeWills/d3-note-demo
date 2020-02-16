@@ -168,6 +168,22 @@ export const chartDatas = {
         "new": 32,
 		"newsp": 12,
 	},
+	"2/14": {
+		"sure": 980,
+		"suspected": 124,
+		"cure": 170,
+		"over": 13,
+        "new": 37,
+		"newsp": 44,
+	},
+	"2/15": {
+		"sure": 988,
+		"suspected": 124,
+		"cure": 192,
+		"over": 14,
+        "new": 8,
+		"newsp": 12,
+	},
 }
 
 // export {}
