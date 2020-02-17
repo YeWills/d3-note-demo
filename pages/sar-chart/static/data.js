@@ -178,7 +178,7 @@ export const chartDatas = {
 	},
 	"2/15": {
 		"sure": 988,
-		"suspected": 0,
+		"suspected": 124,
 		"cure": 192,
 		"over": 14,
         "new": 8,
@@ -186,11 +186,11 @@ export const chartDatas = {
 	},
 	"2/16": {
 		"sure": 983,
-		"suspected": 0,
+		"suspected": 138,
 		"cure": 206,
 		"over": 15,
         "new": 5,
-		"newsp": 0,
+		"newsp": 30,
 	},
 }
 
