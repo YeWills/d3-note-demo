@@ -192,6 +192,22 @@ export const chartDatas = {
         "new": 5,
 		"newsp": 30,
 	},
+	"2/17": {
+		"sure": 985,
+		"suspected": 133,
+		"cure": 215,
+		"over": 20,
+        "new": 6,
+		"newsp": 20,
+	},
+	"2/18": {
+		"sure": 983,
+		"suspected": 138,
+		"cure": 262,
+		"over": 25,
+        "new": 0,
+		"newsp": 30,
+	},
 }
 
 // export {}
