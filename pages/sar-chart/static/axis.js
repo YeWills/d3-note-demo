@@ -54,7 +54,8 @@ class AxisFn{
 		//x轴
 		const xAxis = d3.svg.axis()
 			.scale(xScale)
-			.ticks(this.dataset[0].gdp.length)
+			// .ticks(this.dataset[0].gdp.length)
+			.ticks(16)
 			.tickFormat(function(a){
 				var startDate = '2020/1/24';
 				const month = moment(startDate, 'YYYY/MM/DD').add(a, 'day').get('month')+1;
